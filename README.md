@@ -9,7 +9,7 @@
 ![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-7c5cff?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-7c5cff?style=flat-square)
 ![pywebview](https://img.shields.io/badge/pywebview-WebView2-7c5cff?style=flat-square)
-![Claude AI](https://img.shields.io/badge/Claude%20AI-D97757?logo=claude&logoColor=white)
+![Створено з](https://img.shields.io/badge/Claude%20AI-D97757?logo=claude&logoColor=white)
 
 </div>
 
