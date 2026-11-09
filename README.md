@@ -9,6 +9,7 @@
 ![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-7c5cff?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-7c5cff?style=flat-square)
 ![pywebview](https://img.shields.io/badge/pywebview-WebView2-7c5cff?style=flat-square)
+![Claude AI](https://img.shields.io/badge/Claude%20AI-D97757?logo=claude&logoColor=white)
 
 </div>
 
@@ -50,7 +51,8 @@ python main.py
 ## Збірка інсталятора
 
 1. Встановіть [Inno Setup 6](https://jrsoftware.org/isdl.php).
-2. Запустіть `build.bat`.
+2. Розпакуйте архів **vendor.zip** і покладіть теку vendor в головну теку проекту, поруч з **main.py**
+3. Запустіть `build.bat`.
 
 На виході будуть `dist\Consolio\Consolio.exe` та `installer_output\Consolio-Setup-<версія>.exe`.
 
