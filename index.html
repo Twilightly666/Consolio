@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Consolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="vendor/codemirror/addon/dialog/dialog.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="titlebar" id="titlebar">
+  <div class="side pywebview-drag-region"></div>
+
+  <div class="title pywebview-drag-region">
+    <span class="orn"></span>
+    <i class="fa-solid fa-microchip"></i>
+    <span class="name">Consolio</span>
+    <span class="orn r"></span>
+  </div>
+
+  <div class="side right pywebview-drag-region">
+    <div class="controls">
+      <button id="min" title="Згорнути">
+        <svg viewBox="0 0 12 12"><path d="M1 6h10"/></svg>
+      </button>
+      <button id="max" title="Розгорнути">
+        <svg id="ico-max" viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/></svg>
+        <svg id="ico-restore" viewBox="0 0 12 12" style="display:none">
+          <rect x="1.5" y="3.5" width="7" height="7" rx="1"/>
+          <path d="M3.5 3.5v-1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1"/>
+        </svg>
+      </button>
+      <button id="close" class="close" title="Закрити">
+        <svg viewBox="0 0 12 12"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <nav class="tabbar">
+    <div class="tabs" id="tabs"></div>
+    <button class="tab-add" id="tab-add" title="Нова вкладка">
+      <svg viewBox="0 0 12 12"><path d="M6 1.5v9M1.5 6h9"/></svg>
+    </button>
+    <button class="tab-keys" id="tab-keys" title="Комбінації клавіш"><i class="fa-solid fa-keyboard"></i></button>
+  </nav>
+
+  <div class="center">
+    <div class="navbar">
+      <div class="nav-btns">
+        <button class="nav-btn" id="nav-back" title="Назад"><i class="fa-solid fa-angle-left"></i></button>
+        <button class="nav-btn" id="nav-forward" title="Вперед"><i class="fa-solid fa-angle-right"></i></button>
+        <button class="nav-btn" id="nav-up" title="Вгору"><i class="fa-solid fa-angle-up"></i></button>
+        <button class="nav-btn" id="nav-refresh" title="Оновити"><i class="fa-solid fa-arrows-rotate"></i></button>
+      </div>
+      <div class="addr-wrap" id="addr-wrap">
+        <div class="crumbs" id="crumbs"></div>
+        <input class="field address" id="address" type="text" placeholder="Адреса" spellcheck="false" autocomplete="off" hidden>
+      </div>
+      <div class="field-wrap search" id="search-wrap">
+        <i class="fa-solid fa-magnifying-glass" id="search-ico"></i>
+        <input class="field" id="search" type="text" placeholder="Пошук" spellcheck="false" autocomplete="off">
+        <button class="scope-btn" id="search-scope" type="button"><i class="fa-solid fa-folder-tree"></i></button>
+      </div>
+      <div class="view-switch" id="view-switch">
+        <button class="view-btn active" data-view="details" title="Таблиця"><i class="fa-solid fa-table-list"></i></button>
+        <button class="view-btn" data-view="list" title="Список"><i class="fa-solid fa-bars"></i></button>
+        <button class="view-btn" data-view="grid" title="Плитки"><i class="fa-solid fa-grip"></i></button>
+      </div>
+    </div>
+
+    <div class="row">
+      <aside class="sidebar">
+        <div class="side-body">
+          <div class="place" data-place="desktop">
+            <span class="place-ico"><i class="fa-solid fa-desktop"></i></span>
+            <span class="place-text">
+              <span class="place-name">Робочий стіл</span>
+              <span class="place-meta">Папок: <b id="desktop-folders">—</b> • Файлів: <b id="desktop-files">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="downloads">
+            <span class="place-ico"><i class="fa-solid fa-download"></i></span>
+            <span class="place-text">
+              <span class="place-name">Завантаження</span>
+              <span class="place-meta">Папок: <b id="downloads-folders">—</b> • Файлів: <b id="downloads-files">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="documents">
+            <span class="place-ico"><i class="fa-solid fa-file-lines"></i></span>
+            <span class="place-text">
+              <span class="place-name">Документи</span>
+              <span class="place-meta">Папок: <b id="documents-folders">—</b> • Файлів: <b id="documents-files">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="images">
+            <span class="place-ico"><i class="fa-solid fa-image"></i></span>
+            <span class="place-text">
+              <span class="place-name">Зображення</span>
+              <span class="place-meta">Папок: <b id="images-folders">—</b> • Файлів: <b id="images-files">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="music">
+            <span class="place-ico"><i class="fa-solid fa-music"></i></span>
+            <span class="place-text">
+              <span class="place-name">Музика</span>
+              <span class="place-meta">Папок: <b id="music-folders">—</b> • Файлів: <b id="music-files">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="videos">
+            <span class="place-ico"><i class="fa-solid fa-film"></i></span>
+            <span class="place-text">
+              <span class="place-name">Відеозаписи</span>
+              <span class="place-meta">Папок: <b id="videos-folders">—</b> • Файлів: <b id="videos-files">—</b></span>
+            </span>
+          </div>
+          <div class="sep"></div>
+          <div class="place" data-place="pc">
+            <span class="place-ico"><i class="fa-solid fa-computer"></i></span>
+            <span class="place-text">
+              <span class="place-name">Цей пк</span>
+              <span class="place-meta">Дисків: <b id="pc-drives">—</b></span>
+            </span>
+          </div>
+          <div class="place" data-place="removable">
+            <span class="place-ico"><i class="fa-brands fa-usb"></i></span>
+            <span class="place-text">
+              <span class="place-name">Змінні носії</span>
+              <span class="place-meta">Пристроїв: <b id="removable-devices">—</b></span>
+            </span>
+          </div>
+          <div class="sep"></div>
+          <div class="place" data-place="trash">
+            <span class="place-ico"><i class="fa-solid fa-trash-can"></i></span>
+            <span class="place-text">
+              <span class="place-name">Смітник</span>
+              <span class="place-meta">Папок: <b id="trash-folders">—</b> • Файлів: <b id="trash-files">—</b></span>
+            </span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="body">
+        <main class="content"><div class="files" id="files"></div><div class="keys" id="keys" hidden></div></main>
+        <div class="statusbar">
+          <span>Елементів: <b id="item-count">—</b></span>
+          <span class="sb-part" id="sel-part" hidden>Вибрано елементів: <b id="sel-count">0</b></span>
+          <span class="sb-part" id="size-part" hidden>Спільний розмір: <b id="sel-size">0</b></span>
+          <span class="sb-note" id="note" hidden></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="vendor/codemirror/lib/codemirror.js"></script>
+<script src="vendor/codemirror/addon/selection/active-line.js"></script>
+<script src="vendor/codemirror/addon/edit/matchbrackets.js"></script>
+<script src="vendor/codemirror/addon/edit/closebrackets.js"></script>
+<script src="vendor/codemirror/addon/comment/comment.js"></script>
+<script src="vendor/codemirror/addon/dialog/dialog.js"></script>
+<script src="vendor/codemirror/addon/search/searchcursor.js"></script>
+<script src="vendor/codemirror/addon/search/search.js"></script>
+<script src="vendor/codemirror/addon/search/jump-to-line.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
